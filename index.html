@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewNote</title>
+    <style>
+        body{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: large;
+        }
+        #folder{
+            margin:10px;
+            margin-left: 0;
+            display: grid;
+            grid-template-columns: 30% 30% 30%;
+            column-gap: 5px;
+            /* grid-row-start: ; */
+            /* padding: 5px; */
+            background-color: lightblue;
+            border-radius: 8px;
+        }
+        .note{
+            background-color: white;
+            border: 4px solid black;
+            margin:10px;
+            /* width:25%; */
+        }
+        button,input{
+            width: 200px;
+            height: 50px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: large;
+        }
+        button:active{
+            border:5px solid black;
+            border-radius: 8px;
+        }
+        textarea{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: large;
+        }
+        img{
+            width:500px;
+            height:500px;
+            display:none;
+        }
+        /* video{
+            width:500px;
+            height:500px;
+            display: block; 
+        } */
+    </style>
+</head>
+<body>
+    <h2>MY NOTES</h2>
+    <button id="add" onclick="addNote()">
+     Add Note
+    </button>
+    <img id="img" src="clap.gif" alt="">
+    <audio id="audio" src="alert.mp3"></audio>
+    <!-- <video id="vid" src="clap.gif" controls></video> -->
+  <div id="folder"> 
+    
+  </div> 
+</body>
+<script>
+    let n=0;
+    let tym,s,now;
+    let targetTym = new Array(10);
+    let presentTym = new Array(10);
+    let TymVal = new Array(10);
+    let vid=document.getElementById("audio");
+
+    function congrats()
+    {
+        
+        vid.play();
+        img=document.getElementById("img");
+        if(img.style.display == "none")
+        {
+            console.log("\ncongrats");
+            img.style.display= "block";
+            setTimeout(congrats,2000);
+            //its gonna call the func again
+            //this time the display will be block so it'll become none
+        }
+        else
+        img.style.display= "none";
+    }
+    //below function is used to check the time frequently
+    function showReminder() //when targetTym and presentTym are taken as integers
+    {
+        congrats();
+        //i wanted the audio to play 2 times while showing the reminder
+        //but it didnt play twice maybe bcoz i didnt give enough time gap b/w 
+        //audio plays. So,i used settimeout to give a gap of 3 secs
+        setTimeout(()=>{vid.play()} , 3000);
+        //a problem was found wherein alert executed early than gif and audio
+        //it didnt allow them to work until ok was clicked in the alert box
+        //so i used setTimeout to slow down alert call
+        //moreover i had to place alert func within another func
+        //bcoz alert was geting called immeditately in settimeout()
+        setTimeout(()=>{alert(`Alert From Note ${n}\n${TymVal[n-1]}`)},3000);
+        
+    }
+
+    function addTimer()
+    {
+        tym=document.getElementsByClassName("tym");
+        TymVal[n-1] = tym[n-1].value;
+        console.log("\nvalue of tym input is "+TymVal );
+        s = TymVal[n-1]+"";
+        let hrs = parseInt(s.substring(0,2));
+        let min = parseInt(s.substring(3,5));
+        targetTym[n-1] = hrs*60 + min;
+        console.log("\ntarget time is "+targetTym);
+        
+        now=new Date();
+        presentTym[n-1] = now.getHours()*60 + now.getMinutes();
+
+        //presentTym contains the time present time in seconds
+        console.log("\npresent time is "+presentTym[n-1]);
+
+        timeDifference = targetTym[n-1] - presentTym[n-1];
+        console.log("\ntime difference is "+timeDifference);
+        //The timeDifference is in minutes
+        //but setTimeout() uses milliseconds so convert it
+        setTimeout(showReminder,timeDifference*60*1000);
+    } 
+
+    function addNote()
+    {
+        n++;
+        let x=document.getElementById("folder");
+        x.innerHTML += `<div class="note">${n}<div>
+            <textarea></textarea>
+            <button onclick='addTimer()'>Add Remainder</button>
+            <input class="tym" type="time">
+        `;
+            congrats();
+ }
+</script>
+</html>
