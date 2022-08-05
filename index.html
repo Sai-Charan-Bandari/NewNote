@@ -9,6 +9,7 @@
 </head>
 <body>
     <h2>MY NOTES</h2>
+    <div id="info"></div>
     <img id="img" src="clap.gif" alt="">
     <audio id="audio" src="alert.mp3"></audio>
     <!-- <video id="vid" src="clap.gif" controls></video> -->
@@ -20,6 +21,7 @@
     </div>
 </body>
 <script>
+    let info=document.getElementById("info");
     let vid=document.getElementById("audio");
     function congrats()
     {
@@ -93,6 +95,7 @@
             <input class="tym , noteElement" type="time">
             <button onclick='addTimer()' class="noteElement">Add Remainder</button>
             </div>`;
+           info.innerHTML=`No. of Notes = ${n1}</br>No. of Lists = ${n2}`;
             // congrats();
             vid.play();
     }
@@ -125,12 +128,15 @@
             <textarea id="t${listArray[n2-1].ic}" class="noteElement"> </textarea >
                 </div>`;
                 console.log("\nno of items = "+listArray[n2-1].ic);
+                info.innerHTML=`No. of Notes = ${n1}</br>No. of Lists = ${n2}`;
                 // congrats();
                 vid.play();
     }
             function addListItem(ListId) 
             {
-                console.log("\nno of items = "+(++listArray[n2-1].ic));
+                let k=ListId.substring(1);
+                k=parseInt(k);
+                console.log("\nno of items = "+(++listArray[k-1].ic));
                 let x=document.getElementById(ListId); //we need to access the required list(note) not the folder 
                 x.innerHTML += `<textarea id="t${listArray[n2-1].ic}" class="noteElement"> </textarea ></div>`;
                     //the above code works really fine but u need to place the "+" button above text area
