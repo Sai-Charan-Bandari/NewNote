@@ -20,19 +20,9 @@
     </div>
 </body>
 <script>
-    //for note
-    let n1=0;
-    let tym,s,now;
-    let targetTym = new Array(10);
-    let presentTym = new Array(10);
-    let TymVal = new Array(10);
     let vid=document.getElementById("audio");
-    //for list
-    let n2=0;
-
     function congrats()
     {
-        
         vid.play();
         img=document.getElementById("img");
         if(img.style.display == "none")
@@ -46,7 +36,14 @@
         else
         img.style.display= "none";
     }
-    //below function is used to check the time frequently
+    ///////////////////////////////////////////////////
+    //FOR NOTES
+    let n1=0;
+    let tym,s,now;
+    let targetTym = new Array(10);
+    let presentTym = new Array(10);
+    let TymVal = new Array(10);
+  
     function showReminder() //when targetTym and presentTym are taken as integers
     {
         congrats();
@@ -79,7 +76,7 @@
         //presentTym contains the time present time in seconds
         console.log("\npresent time is "+presentTym[n1-1]);
 
-        timeDifference = targetTym[n-1] - presentTym[n1-1];
+        timeDifference = targetTym[n1-1] - presentTym[n1-1];
         console.log("\ntime difference is "+timeDifference);
         //The timeDifference is in minutes
         //but setTimeout() uses milliseconds so convert it
@@ -90,26 +87,55 @@
     {
         n1++;
         let x=document.getElementById("folder1");
-        x.innerHTML += `<div class="note">
+        x.innerHTML += `<div class="note" id="n${n1}">
             <div class="noteElement">${n1}</div>
             <textarea  class="noteElement"> </textarea >
             <input class="tym , noteElement" type="time">
             <button onclick='addTimer()' class="noteElement">Add Remainder</button>
             </div>`;
-            congrats();
+            // congrats();
+            vid.play();
     }
-
+//////////////////////////////////////////////////////////////////
+//FOR LISTS
+//i have added a scope {} below to use all variables within this scope only
+//but it didnt allow me to access the below variables at the console directly (in web browser)
+//therefore i commented this scope
+//{
+    let n2=0;//keeps no. of lists(notes) formed
+    function list(x,y)
+    {
+       this.no=x;//list no
+       this.ic=y;//contains item counts of each list(note)
+    }
+    let listArray=[];
+    //speciality of lists in js:
+    //even though it declared it as empty
+    //i can add elements using arr[0],arr[1]...without using append() or push()
     function addList()
     {
         n2++;
+        listArray[n2-1]= new list(n2-1,1);
         let x=document.getElementById("folder2");
-        x.innerHTML += `<div class="note"> 
+        x.innerHTML += `<div class="note" id="l${n2}"> 
             <div class="noteElement">${n2}</div>
-            <textarea  class="noteElement"> </textarea >
             <input class="tym , noteElement" type="time">
             <button onclick='addTimer()' class="noteElement">Add Remainder</button>
-            </div>`;
-            congrats();
+            <button onclick='addListItem("l${n2}")' class='noteElement'>+</button>    
+            <textarea id="t${listArray[n2-1].ic}" class="noteElement"> </textarea >
+                </div>`;
+                console.log("\nno of items = "+listArray[n2-1].ic);
+                // congrats();
+                vid.play();
     }
+            function addListItem(ListId) 
+            {
+                console.log("\nno of items = "+(++listArray[n2-1].ic));
+                let x=document.getElementById(ListId); //we need to access the required list(note) not the folder 
+                x.innerHTML += `<textarea id="t${listArray[n2-1].ic}" class="noteElement"> </textarea ></div>`;
+                    //the above code works really fine but u need to place the "+" button above text area
+                    //we to place "+" button below the textareas 
+            }
+//}            
 </script>
 </html>
