@@ -22,11 +22,20 @@ body{
 }
 .note{
     background-color: whitesmoke;
-    border: 4px solid black;
+    border: 2px solid black;
+    border-radius: 8px;
     margin:10px;
-    /* width:25%; */
+    display: flex;
+    flex-direction: column;
 }
-button,input{
+.noteElement{
+    width:80%;
+    margin:4px auto;
+}
+.note textarea{
+    height: 100%;
+}
+button,input,textarea{
     width: 200px;
     height: 50px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -36,13 +45,9 @@ button:active{
     border:5px solid black;
     border-radius: 8px;
 }
-textarea{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: large;
-}
 img{
-    width:500px;
-    height:500px;
+    width:300px;
+    height:300px;
     display:none;
 }
 /* video{

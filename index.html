@@ -91,10 +91,10 @@
         n1++;
         let x=document.getElementById("folder1");
         x.innerHTML += `<div class="note">
-            <div>${n1}<div>
-            <textarea></textarea>
-            <button onclick='addTimer()'>Add Remainder</button>
-            <input class="tym" type="time">
+            <div class="noteElement">${n1}</div>
+            <textarea  class="noteElement"> </textarea >
+            <input class="tym , noteElement" type="time">
+            <button onclick='addTimer()' class="noteElement">Add Remainder</button>
             </div>`;
             congrats();
     }
@@ -104,11 +104,10 @@
         n2++;
         let x=document.getElementById("folder2");
         x.innerHTML += `<div class="note"> 
-            <div>${n2}</div>
-            <textarea>
-            </textarea>
-            <button onclick='addTimer()'>Add Remainder</button>
-            <input class="tym" type="time">
+            <div class="noteElement">${n2}</div>
+            <textarea  class="noteElement"> </textarea >
+            <input class="tym , noteElement" type="time">
+            <button onclick='addTimer()' class="noteElement">Add Remainder</button>
             </div>`;
             congrats();
     }
