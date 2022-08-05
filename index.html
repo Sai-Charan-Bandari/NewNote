@@ -5,73 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NewNote</title>
-    <style>
-        body{
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-            font-size: large;
-        }
-        #folder{
-            margin:10px;
-            margin-left: 0;
-            display: grid;
-            grid-template-columns: 30% 30% 30%;
-            column-gap: 5px;
-            /* grid-row-start: ; */
-            /* padding: 5px; */
-            background-color: lightblue;
-            border-radius: 8px;
-        }
-        .note{
-            background-color: white;
-            border: 4px solid black;
-            margin:10px;
-            /* width:25%; */
-        }
-        button,input{
-            width: 200px;
-            height: 50px;
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-            font-size: large;
-        }
-        button:active{
-            border:5px solid black;
-            border-radius: 8px;
-        }
-        textarea{
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
-            font-size: large;
-        }
-        img{
-            width:500px;
-            height:500px;
-            display:none;
-        }
-        /* video{
-            width:500px;
-            height:500px;
-            display: block; 
-        } */
-    </style>
+    <link rel="stylesheet" href="note.css">
 </head>
 <body>
     <h2>MY NOTES</h2>
-    <button id="add" onclick="addNote()">
-     Add Note
-    </button>
     <img id="img" src="clap.gif" alt="">
     <audio id="audio" src="alert.mp3"></audio>
     <!-- <video id="vid" src="clap.gif" controls></video> -->
-  <div id="folder"> 
-    
-  </div> 
+    <div id="folderContainer">
+        <button id="add" onclick="addNote()">Add Note</button>
+        <button id="add" onclick="addList()">Add List</button>
+        <div class="folder" id="folder1"> </div> 
+        <div class="folder" id="folder2"> </div>
+    </div>
 </body>
 <script>
-    let n=0;
+    //for note
+    let n1=0;
     let tym,s,now;
     let targetTym = new Array(10);
     let presentTym = new Array(10);
     let TymVal = new Array(10);
     let vid=document.getElementById("audio");
+    //for list
+    let n2=0;
 
     function congrats()
     {
@@ -102,28 +59,27 @@
         //so i used setTimeout to slow down alert call
         //moreover i had to place alert func within another func
         //bcoz alert was geting called immeditately in settimeout()
-        setTimeout(()=>{alert(`Alert From Note ${n}\n${TymVal[n-1]}`)},3000);
+        setTimeout(()=>{alert(`Alert From Note ${n1}\n${TymVal[n1-1]}`)},3000);
         
     }
 
     function addTimer()
     {
         tym=document.getElementsByClassName("tym");
-        TymVal[n-1] = tym[n-1].value;
+        TymVal[n1-1] = tym[n1-1].value;
         console.log("\nvalue of tym input is "+TymVal );
-        s = TymVal[n-1]+"";
+        s = TymVal[n1-1]+"";
         let hrs = parseInt(s.substring(0,2));
         let min = parseInt(s.substring(3,5));
-        targetTym[n-1] = hrs*60 + min;
+        targetTym[n1-1] = hrs*60 + min;
         console.log("\ntarget time is "+targetTym);
         
         now=new Date();
-        presentTym[n-1] = now.getHours()*60 + now.getMinutes();
-
+        presentTym[n1-1] = now.getHours()*60 + now.getMinutes();
         //presentTym contains the time present time in seconds
-        console.log("\npresent time is "+presentTym[n-1]);
+        console.log("\npresent time is "+presentTym[n1-1]);
 
-        timeDifference = targetTym[n-1] - presentTym[n-1];
+        timeDifference = targetTym[n-1] - presentTym[n1-1];
         console.log("\ntime difference is "+timeDifference);
         //The timeDifference is in minutes
         //but setTimeout() uses milliseconds so convert it
@@ -132,14 +88,29 @@
 
     function addNote()
     {
-        n++;
-        let x=document.getElementById("folder");
-        x.innerHTML += `<div class="note">${n}<div>
+        n1++;
+        let x=document.getElementById("folder1");
+        x.innerHTML += `<div class="note">
+            <div>${n1}<div>
             <textarea></textarea>
             <button onclick='addTimer()'>Add Remainder</button>
             <input class="tym" type="time">
-        `;
+            </div>`;
             congrats();
- }
+    }
+
+    function addList()
+    {
+        n2++;
+        let x=document.getElementById("folder2");
+        x.innerHTML += `<div class="note"> 
+            <div>${n2}</div>
+            <textarea>
+            </textarea>
+            <button onclick='addTimer()'>Add Remainder</button>
+            <input class="tym" type="time">
+            </div>`;
+            congrats();
+    }
 </script>
 </html>
