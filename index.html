@@ -21,8 +21,11 @@
     </div>
 </body>
 <script>
+    let n1=0;//keeps no. of notes formed
+    let n2=0;//keeps no. of lists formed
     let info=document.getElementById("info");
     let vid=document.getElementById("audio");
+    
     function congrats()
     {
         vid.play();
@@ -40,12 +43,12 @@
     }
     ///////////////////////////////////////////////////
     //FOR NOTES
-    let n1=0;
     let tym,s,now;
     let targetTym = new Array(10);
     let presentTym = new Array(10);
     let TymVal = new Array(10);
-  
+    displayNote();//to display notes initially
+    
     function showReminder() //when targetTym and presentTym are taken as integers
     {
         congrats();
@@ -77,35 +80,99 @@
         presentTym[n1-1] = now.getHours()*60 + now.getMinutes();
         //presentTym contains the time present time in seconds
         console.log("\npresent time is "+presentTym[n1-1]);
-
+        
         timeDifference = targetTym[n1-1] - presentTym[n1-1];
         console.log("\ntime difference is "+timeDifference);
         //The timeDifference is in minutes
         //but setTimeout() uses milliseconds so convert it
         setTimeout(showReminder,timeDifference*60*1000);
     } 
-
+    
+    function note(x,y)
+    {
+        this.no=x;//note no
+        this.text=y;//text inside the node
+    }
+    let noteArray=[];
+    
     function addNote()
     {
         n1++;
-        let x=document.getElementById("folder1");
-        x.innerHTML += `<div class="note" id="n${n1}">
-            <div class="noteElement">${n1}</div>
-            <textarea  class="noteElement"> </textarea >
-            <input class="tym , noteElement" type="time">
-            <button onclick='addTimer()' class="noteElement">Add Remainder</button>
-            </div>`;
-           info.innerHTML=`No. of Notes = ${n1}</br>No. of Lists = ${n2}`;
-            // congrats();
-            vid.play();
+           noteArray.push(new note(n1,"mic"));//adding new note obj into array
+           displayNote();
+           // congrats();
+           vid.play();
+           
+           for(let i=0;i<n1;i++)
+           {
+               console.log("\nat"+i+" = "+"note"+noteArray[i].no);
+            }
+        }
+        function displayNote()
+        {
+            info.innerHTML=`No. of Notes = ${n1}</br>No. of Lists = ${n2}`;
+            
+            let x=document.getElementById("folder1");
+        x.innerHTML="";
+        for(let i=0;i<n1;i++)
+        {
+            // if(noteArray[i].text==undefined)
+            // noteArray[i].text="";
+
+            //   console.log("note array = "+noteArray[i].no);
+
+            x.innerHTML += `<div class="note" id="n${noteArray[i].no}">
+                <div class="noteElement">${i+1}</div>
+                <textarea  class="noteElement" id="t${noteArray[i].no}">${noteArray[i].text} </textarea >
+                    <input class="tym , noteElement" type="time">
+                    <button onclick='addTimer()' class="noteElement">Add Reminder</button>
+                    <button onclick='deleteNode("${i}","n${noteArray[i].no}")' class="noteElement">Delete</button>
+                    <button onclick='editNode("${i}","n${noteArray[i].no}")' class="noteElement">Edit</button>
+                    </div>`;
+                    
+                }
+            }
+            function editNode(i,noteId)//receives index of noteArray element(note) and id of note
+            {
+                //'i' was sent as a string bcoz
+        i=parseInt(i);
+        let t=document.getElementById(noteId).getElementsByTagName("textarea")[0].value;
+        // console.log("\nfound i = "+i);
+        // console.log("\nfound noteArray element = "+noteArray[i].text);
+        console.log("\nupdated text = "+t);
+        // console.log("\nfound textarea = "+textId);
+        noteArray[i].text=t;
     }
-//////////////////////////////////////////////////////////////////
-//FOR LISTS
+    function deleteNode(k,noteId) //it takes index of noteArray element and id of note element not text area
+    {
+        console.log(noteId);
+        k=parseInt(k);
+        //deletion implementation is similar to linear queue deletion
+        //basically what we are doing is ... taking the index of element to be deleted
+        //and shifting all the next elements one index/step back.
+        //so that the element to be deleted is overridden by its next element
+        //now we delete/pop out the last element 
+        //and also update n1
+        for(let i=k;i<n1-1;i++)
+        {
+            // noteArray[i].no=noteArray[i+1].no;
+            noteArray[i].text=noteArray[i+1].text;
+        }
+        noteArray.pop();
+        --n1;
+        for(let i=0;i<n1;i++)
+        {
+            console.log("\nat"+i+" = "+"note"+noteArray[i].no);
+        }
+        
+        displayNote();
+    }
+    //////////////////////////////////////////////////////////////////
+    //FOR LISTS
 //i have added a scope {} below to use all variables within this scope only
 //but it didnt allow me to access the below variables at the console directly (in web browser)
 //therefore i commented this scope
 //{
-    let n2=0;//keeps no. of lists(notes) formed
     function list(x,y)
     {
        this.no=x;//list no
@@ -123,7 +190,7 @@
         x.innerHTML += `<div class="note" id="l${n2}"> 
             <div class="noteElement">${n2}</div>
             <input class="tym , noteElement" type="time">
-            <button onclick='addTimer()' class="noteElement">Add Remainder</button>
+            <button onclick='addTimer()' class="noteElement">Add Reminder</button>
             <button onclick='addListItem("l${n2}")' class='noteElement'>+</button>    
             <textarea id="t${listArray[n2-1].ic}" class="noteElement"> </textarea >
                 </div>`;
