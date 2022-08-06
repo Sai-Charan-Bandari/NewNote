@@ -2,7 +2,10 @@ body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: large;
 }
-#info{
+#info1{
+    margin-bottom:5px;
+}
+#info1{
     margin-bottom:5px;
 }
 #folderContainer{
@@ -10,6 +13,22 @@ body{
     grid-template-columns: 50% 49.5%;
     column-gap: 20px;
     /* align-items: center; */
+}
+.textToElse{
+    padding-top: 3px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 4;
+    grid-row-end: 5;
+}
+#sp{
+    width:80%;
+    margin:auto auto;
+    display: flex;
+}
+#sp button{
+    width:40%;
+    margin:1% auto;
 }
 .folder{
     /* width:40%; */

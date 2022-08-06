@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,11 +10,12 @@
 
 <body>
     <h2>MY NOTES</h2>
-    <div id="info"></div>
     <img id="img" src="clap.gif" alt="">
     <audio id="audio" src="alert.mp3"></audio>
     <!-- <video id="vid" src="clap.gif" controls></video> -->
     <div id="folderContainer">
+        <div id="info1"></div>
+        <div id="info2"></div>
         <span>
             <button id="add" onclick="addNote()">Add Note</button>
             <button id="add" onclick="clearNote()">Clear Notes</button>
@@ -26,13 +26,25 @@
         </span>
         <div class="folder" id="folder1"> </div>
         <div class="folder" id="folder2"> </div>
+        <div class="note textToElse">
+            <textarea class="noteElement" id="convert" cols="30" rows="10"></textarea>
+            <span id="sp">
+                <button  onclick="textToNote()">Convert Text to Note</button>
+                <button  onclick="textToList()">Convert Text to List</button>
+            </span>
+        </div>
     </div>
 </body>
 <script>
     let n1 = 0;//keeps no. of notes formed
     let n2 = 0;//keeps no. of lists formed
-    let info = document.getElementById("info");
+    let info1 = document.getElementById("info1");
+    let info2 = document.getElementById("info2");
     let vid = document.getElementById("audio");
+    let convert = document.getElementById("convert");
+    
+    displayNote();//to display notes initially
+    displayList();//to display lists initially
 
     function congrats() {
         vid.play();
@@ -48,12 +60,41 @@
             img.style.display = "none";
     }
     ///////////////////////////////////////////////////
+    //TEXT TO LIST/NOTE
+    function textToNote()
+    {
+        let x = convert.value;
+        n1++;
+        noteArray.push(new note(n1, x));//adding new note obj into array
+        displayNote();
+        // congrats();
+        vid.play();
+        convert.value = "";
+    }
+    function textToList()
+    {
+        let x=convert.value;
+        n2++;
+        listArray[n2 - 1] = new list(n2 , 1);//we can use push also
+        //we need to convert the text into string array
+        let arr = x.split('\n');
+        listArray[n2-1].ic = arr.length;
+        for(let k=0;k<listArray[n2-1].ic;k++)
+        {
+            console.log("item"+k+" = "+arr[k]);
+            listArray[n2-1].ilist[k] = arr[k];
+        }
+        displayList();
+        // congrats();
+        vid.play();
+        convert.value = "";
+    }
+    ///////////////////////////////////////////////////
     //FOR NOTES
     let tym, s, now;
     let targetTym = new Array(10);
     let presentTym = new Array(10);
     let TymVal = new Array(10);
-    displayNote();//to display notes initially
 
     function showReminder() //when targetTym and presentTym are taken as integers
     {
@@ -118,14 +159,13 @@
         }
     }
     function displayNote() {
-        info.innerHTML = `No. of Notes = ${n1}</br>No. of Lists = ${n2}`;
+        info1.innerHTML = `No. of Notes = ${n1}`;
 
         let x = document.getElementById("folder1");
         x.innerHTML = "";
         for (let i = 0; i < n1; i++) {
             // if(noteArray[i].text==undefined)
             // noteArray[i].text="";
-
             //   console.log("note array = "+noteArray[i].no);
 
             x.innerHTML += `<div class="note" id="n${noteArray[i].no}">
@@ -195,7 +235,7 @@
     }
     function displayList()
     {
-        info.innerHTML = `No. of Notes = ${n1}</br>No. of Lists = ${n2}`;
+        info2.innerHTML = `No. of Lists = ${n2}`;
 
         let x = document.getElementById("folder2");
         x.innerHTML="";
@@ -246,12 +286,15 @@
     function editList(i,listId)
     {
         //in this save function 
-        //we need to save only the last item of the list
-        //bcoz all the previous items are already saved using addListItem()
+        //we need to save all the items of the list
+        // bcoz there may be changes to multiple list items at random indices
         i = parseInt(i);
-            let t = document.getElementById(listId).getElementsByTagName("textarea")[listArray[i].ic -1].value;
+        for(let k=0;k<listArray[i].ic;k++)
+        {
+            let t = document.getElementById(listId).getElementsByTagName("textarea")[k].value;
             console.log("\nupdated text = " + t);
-            listArray[i].ilist[listArray[i].ic -1] = t;
+            listArray[i].ilist[k] = t;
+        }
     }
     function deleteList(k,listId)
     {
