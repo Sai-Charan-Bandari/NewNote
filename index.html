@@ -10,6 +10,7 @@
 
 <body>
     <h2>MY NOTES</h2>
+    <marquee behavior="" direction="">time reminder feature unavailable.List and notes are still not connected to localStorage.Need to add checkboxes and remove option for each list item. Still in progress. :)</marquee>
     <img id="img" src="clap.gif" alt="">
     <audio id="audio" src="alert.mp3"></audio>
     <!-- <video id="vid" src="clap.gif" controls></video> -->
@@ -27,7 +28,7 @@
         <div class="folder" id="folder1"> </div>
         <div class="folder" id="folder2"> </div>
         <div class="note textToElse">
-            <textarea class="noteElement" id="convert" cols="30" rows="10"></textarea>
+            <textarea placeholder="paste/type text here or use add note/list option" class="noteElement" id="convert" cols="30" rows="10"></textarea>
             <span id="sp">
                 <button  onclick="textToNote()">Convert Text to Note</button>
                 <button  onclick="textToList()">Convert Text to List</button>
