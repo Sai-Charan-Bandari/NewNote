@@ -77,6 +77,14 @@ img{
     height:300px;
     display:none;
 }
+#lsp{
+    display: flex;
+    height: 100%;
+}
+#lsp button{
+    width:10%;
+    height: 100%;
+}
 /* video{
     width:500px;
     height:500px;

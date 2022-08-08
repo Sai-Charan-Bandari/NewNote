@@ -338,7 +338,12 @@
                     `;
                     for(let j=1;j<=listArray[i].ic;j++)
                     {
-                        str += `<textarea id="t${j}" class="noteElement">${listArray[i].ilist[j-1]}</textarea >`;
+                        str += `
+                        <div class="noteElement" id="lsp">
+                        <button onclick='deleteListItem("${i}","${j-1}")'>-</button>
+                        <textarea id="t${j}" >${listArray[i].ilist[j-1]}</textarea >
+                        </div>    
+                        `;
                     }
                 str += `<button onclick='addListItem("${i}","l${listArray[i].no}")' class='noteElement'>+</button>    
                     </div>`;
@@ -358,18 +363,36 @@
         //the index k is received as string instead of number
         //bcoz if we use number then it will be updated every time whereas string value remains same
         k = parseInt(k);
-
-//attempt to save text in prev item before creating new item
-//this will help us by avoiding clicking of save each time to store previous items
-    let t = document.getElementById(listId).getElementsByTagName("textarea")[listArray[k].ic -1].value;//accessing the last text area
-            console.log("\nupdated text = " + t);
-            listArray[k].ilist[listArray[k].ic-1] = t;//updating value of last item in itemlist
-//now we r gonna add a new item
+       if(listArray[k].ic != 0) //the ilist must not be empty inorder to save prev text
+       {
+           //attempt to save text in prev item before creating new item
+           //this will help us by avoiding clicking of save each time to store previous items
+               let t = document.getElementById(listId).getElementsByTagName("textarea")[listArray[k].ic -1].value;//accessing the last text area
+                       console.log("\nupdated text = " + t);
+                       listArray[k].ilist[listArray[k].ic-1] = t;//updating value of last item in itemlist
+       }
+    //now we r gonna add a new item
         ++listArray[k].ic;
         listArray[k].ilist.push("");//pushed an empty string .ie added a listitem in the list
         console.log("\nno of items = " + (listArray[k].ic));
         displayList();
     }
+
+    function deleteListItem(k,j)
+    {
+        //k is list index
+        //j is index of list item within the list
+        k=parseInt(k);
+        j=parseInt(j);
+        listArray[k].ilist
+        for (let i = j; i < listArray[k].ic - 1; i++) {
+            listArray[k].ilist[i] = listArray[k].ilist[i+1];
+        }
+        listArray[k].ilist.pop();
+        --listArray[k].ic;
+        displayList();
+    }
+
     function editList(i,listId)
     {
         //in this save function 
