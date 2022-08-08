@@ -66,6 +66,50 @@
         else
             img.style.display = "none";
     }
+    function showReminder(k,type) //contains index of noteArray element
+    {
+        // targetTym and presentTym are taken as integers
+        k=parseInt(k);
+        congrats();
+        //i wanted the audio to play 2 times while showing the reminder
+        //but it didnt play twice maybe bcoz i didnt give enough time gap b/w 
+        //audio plays. So,i used settimeout to give a gap of 3 secs
+        setTimeout(() => { vid.play() }, 3000);
+        //a problem was found wherein alert executed early than gif and audio
+        //it didnt allow them to work until ok was clicked in the alert box
+        //so i used setTimeout to slow down alert call
+        //moreover i had to place alert func within another func
+        //bcoz alert was geting called immeditately in settimeout()
+        if(type=='n')
+        setTimeout(() => { alert(`Alert From Note ${noteArray[k].no}\n${noteArray[k].text}`) }, 3000);
+        else
+        setTimeout(() => { alert(`Alert From List ${listArray[k].no}`) }, 3000);
+
+    }
+    function addTimer(k,type) {
+        //type refers to note or list (n or l)
+        k=parseInt(k);//contains index of noteArray/listArray element
+      let  tym = document.getElementsByClassName("tym")[k];
+      let  TymVal = tym.value;
+        console.log("\nvalue of tym input is " + TymVal);
+      let  s = TymVal + "";
+        let hrs = parseInt(s.substring(0, 2));
+        let min = parseInt(s.substring(3, 5));
+       let targetTym = hrs*60*60 + min*60;//seconds
+        console.log("\ntarget time is " + targetTym);
+
+       let now = new Date();
+      let presentTym = now.getHours()*60*60 + now.getMinutes()*60 + now.getSeconds();
+        //presentTym contains the time present time in seconds
+        console.log("\npresent time is " + presentTym);
+
+      let  timeDifference = targetTym - presentTym;
+        console.log("\ntime difference is " + timeDifference);
+        //The timeDifference is in minutes
+        //but setTimeout() uses milliseconds so convert it
+
+        setTimeout(showReminder, timeDifference*1000, k, type);//set timeout also takes function parameters
+    }
     ///////////////////////////////////////////////////
     //TEXT TO LIST/NOTE
     function textToNote()
@@ -134,10 +178,10 @@
                        arr.push(y1[j]);
                    }
                 }
-
             }
             else{
                 //no split
+                arr.push(x);
             }
         }
         else{
@@ -176,49 +220,7 @@
     }
     ///////////////////////////////////////////////////
     //FOR NOTES
-    let tym, s, now;
-    let targetTym = new Array(10);
-    let presentTym = new Array(10);
-    let TymVal = new Array(10);
-
-    function showReminder() //when targetTym and presentTym are taken as integers
-    {
-        congrats();
-        //i wanted the audio to play 2 times while showing the reminder
-        //but it didnt play twice maybe bcoz i didnt give enough time gap b/w 
-        //audio plays. So,i used settimeout to give a gap of 3 secs
-        setTimeout(() => { vid.play() }, 3000);
-        //a problem was found wherein alert executed early than gif and audio
-        //it didnt allow them to work until ok was clicked in the alert box
-        //so i used setTimeout to slow down alert call
-        //moreover i had to place alert func within another func
-        //bcoz alert was geting called immeditately in settimeout()
-        setTimeout(() => { alert(`Alert From Note ${n1}\n${TymVal[n1 - 1]}`) }, 3000);
-
-    }
-
-    function addTimer() {
-        tym = document.getElementsByClassName("tym");
-        TymVal[n1 - 1] = tym[n1 - 1].value;
-        console.log("\nvalue of tym input is " + TymVal);
-        s = TymVal[n1 - 1] + "";
-        let hrs = parseInt(s.substring(0, 2));
-        let min = parseInt(s.substring(3, 5));
-        targetTym[n1 - 1] = hrs * 60 + min;
-        console.log("\ntarget time is " + targetTym);
-
-        now = new Date();
-        presentTym[n1 - 1] = now.getHours() * 60 + now.getMinutes();
-        //presentTym contains the time present time in seconds
-        console.log("\npresent time is " + presentTym[n1 - 1]);
-
-        timeDifference = targetTym[n1 - 1] - presentTym[n1 - 1];
-        console.log("\ntime difference is " + timeDifference);
-        //The timeDifference is in minutes
-        //but setTimeout() uses milliseconds so convert it
-        setTimeout(showReminder, timeDifference * 60 * 1000);
-    }
-
+        
     function note(x, y) {
         this.no = x;//note no
         this.text = y;//text inside the node
@@ -257,7 +259,7 @@
                 <div class="noteElement">${i + 1}</div>
                 <textarea  class="noteElement" id="t${noteArray[i].no}">${noteArray[i].text} </textarea >
                     <input class="tym , noteElement" type="time">
-                    <button onclick='addTimer()' class="noteElement">Add Reminder</button>
+                    <button onclick='addTimer("${i}","n")' class="noteElement">Add Reminder</button>
                     <button onclick='deleteNote("${i}","n${noteArray[i].no}")' class="noteElement">Delete</button>
                     <button onclick='editNote("${i}","n${noteArray[i].no}")' class="noteElement">Save</button>
                     </div>`;
@@ -330,7 +332,7 @@
             str += `<div class="note" id="l${listArray[i].no}"> 
                 <div class="noteElement">${i+1}</div>
                 <input class="tym , noteElement" type="time">
-                <button onclick='addTimer()' class="noteElement">Add Reminder</button>
+                <button onclick='addTimer("${i}","l")' class="noteElement">Add Reminder</button>
                 <button onclick='deleteList("${i}","l${listArray[i].no}")' class="noteElement">Delete</button>
                 <button onclick='editList("${i}","l${listArray[i].no}")' class="noteElement">Save</button>
                     `;
