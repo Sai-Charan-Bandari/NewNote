@@ -26,6 +26,11 @@ body{
     margin:auto auto;
     display: flex;
 }
+#sp input{
+    width:80%;
+    height:70%;
+    margin:auto auto;
+}
 #sp button{
     width:40%;
     margin:1% auto;
