@@ -42,16 +42,50 @@
     </div>
 </body>
 <script>
+    // localStorage.removeItem("n1");
+    // localStorage.removeItem("n2");
+
+    //an issue occured in local storage and was accidentally resolved
+    //i initially used above code to reset n1 and n2
+    //after reloading the page
+    //i commented the above code..then console displayed 
+    //syntax error :unexpected end of json input at json.parse()..
+    //it showed an issue at displayNote() at the JSON.parse() line
+    //i resolved it in the following way
+    //i used the above code again and reloaded the page
+    //this time i added some elements into the noteArray and listArray
+    //then i commented the code
+
     let n1 = 0;//keeps no. of notes formed
     let n2 = 0;//keeps no. of lists formed
+    let noteArray=[];
+    let listArray=[];
     let info1 = document.getElementById("info1");
     let info2 = document.getElementById("info2");
     let vid = document.getElementById("audio");
     let convert = document.getElementById("convert");
     let check1 = document.getElementById("check1");
     let check2 = document.getElementById("check2");
+
+    n1=localStorage.getItem("n1");
+        if(n1==null)
+        {
+            n1=0;
+            localStorage.setItem('n1','0');
+        localStorage.setItem("noteArray",[]);
+    }
+    else
     displayNote();//to display notes initially
-    displayList();//to display lists initially
+    
+    n2=localStorage.getItem("n2");
+    if(n2==null)
+    {
+        n2=0;
+        localStorage.setItem('n2','0');
+        // localStorage.setItem("listArray",[]);
+        }
+        else
+        displayList();//to display lists initially
 
     function congrats() {
         vid.play();
@@ -117,6 +151,12 @@
         let x = convert.value;
         n1++;
         noteArray.push(new note(n1, x));//adding new note obj into array
+
+        //
+        localStorage.setItem("n1",n1);
+        localStorage.setItem("noteArray",JSON.stringify(noteArray));
+        //
+
         displayNote();
         // congrats();
         vid.play();
@@ -213,6 +253,12 @@
             console.log("item"+k+" = "+arr[k]);
             listArray[n2-1].ilist[k] = arr[k];
         }
+
+        //
+        localStorage.setItem("n2",n2);
+        localStorage.setItem("listArray",JSON.stringify(listArray));
+        //
+
         displayList();
         // congrats();
         vid.play();
@@ -226,17 +272,29 @@
         this.text = y;//text inside the node
     }
     //initialization of array of notes
-    let noteArray = [];
+    // let noteArray = [];
 
     function clearNote(){
         for(let i=0;i<n1;i++)
         noteArray.pop();
         n1=0;
+
+        //
+        localStorage.setItem("n1",n1);
+        localStorage.setItem("noteArray",JSON.stringify(noteArray));
+        //
+
         displayNote();
     }
     function addNote() {
-        n1++;
+        ++n1;
         noteArray.push(new note(n1, "mic"));//adding new note obj into array
+
+        //
+        localStorage.setItem("n1",n1);
+        localStorage.setItem("noteArray",JSON.stringify(noteArray));
+        //
+
         displayNote();
         // congrats();
         vid.play();
@@ -246,6 +304,14 @@
         }
     }
     function displayNote() {
+
+        //
+        n1=localStorage.getItem("n1");
+        n1=parseInt(n1);
+        let na=localStorage.getItem("noteArray");
+        noteArray=JSON.parse(na);
+        //
+
         info1.innerHTML = `No. of Notes = ${n1}`;
 
         let x = document.getElementById("folder1");
@@ -276,6 +342,12 @@
         console.log("\nupdated text = " + t);
         // console.log("\nfound textarea = "+textId);
         noteArray[i].text = t;
+
+        //
+        localStorage.setItem("n1",n1);
+        localStorage.setItem("noteArray",JSON.stringify(noteArray));
+        //
+
     }
     function deleteNote(k, noteId) //it takes index of noteArray element and id of note element not text area
     {
@@ -297,6 +369,11 @@
             console.log("\nat" + i + " = " + "note" + noteArray[i].no);
         }
 
+        //
+        localStorage.setItem("n1",n1);
+        localStorage.setItem("noteArray",JSON.stringify(noteArray));
+        //
+
         displayNote();
     }
     //////////////////////////////////////////////////////////////////
@@ -310,7 +387,9 @@
         this.ic = y;//contains item counts of each list(note)
         this.ilist = ["mic"];//list of items within the list(note)
     }
-    let listArray = [];
+    // initialization of array of lists
+    // let listArray = [];
+
     //speciality of lists in js:
     //even though it declared it as empty
     //i can add elements using arr[0],arr[1]...without using append() or push()
@@ -318,10 +397,23 @@
         for(let i=0;i<n2;i++)
         listArray.pop();
         n2=0;
+
+        //
+        localStorage.setItem("n2",n2);
+        localStorage.setItem("listArray",JSON.stringify(listArray));
+        //
+
         displayList();
     }
     function displayList()
     {
+        //
+        n2=localStorage.getItem("n2");
+        n2=parseInt(n2);
+            la=localStorage.getItem("listArray");
+            listArray=JSON.parse(la);  
+        //
+
         info2.innerHTML = `No. of Lists = ${n2}`;
 
         let x = document.getElementById("folder2");
@@ -355,6 +447,12 @@
         listArray[n2 - 1] = new list(n2 , 1); //we can use push also
         // console.log("\nno of items = " + listArray[n2 - 1].ic);
         // console.log("\n1st item = " + listArray[n2 - 1].ilist[0]);
+
+        //
+        localStorage.setItem("n2",n2);
+        localStorage.setItem("listArray",JSON.stringify(listArray));
+        //
+
         displayList();
         // congrats();
         vid.play();
@@ -375,6 +473,12 @@
         ++listArray[k].ic;
         listArray[k].ilist.push("");//pushed an empty string .ie added a listitem in the list
         console.log("\nno of items = " + (listArray[k].ic));
+
+        //
+        // localStorage.setItem("n2",n2);
+        localStorage.setItem("listArray",JSON.stringify(listArray));
+        //
+
         displayList();
     }
 
@@ -390,6 +494,12 @@
         }
         listArray[k].ilist.pop();
         --listArray[k].ic;
+
+         //
+        // localStorage.setItem("n2",n2);
+        localStorage.setItem("listArray",JSON.stringify(listArray));
+        //
+
         displayList();
     }
 
@@ -405,6 +515,12 @@
             console.log("\nupdated text = " + t);
             listArray[i].ilist[k] = t;
         }
+
+         //
+        // localStorage.setItem("n2",n2);
+        localStorage.setItem("listArray",JSON.stringify(listArray));
+        //
+
     }
     function deleteList(k,listId)
     {
@@ -419,6 +535,12 @@
         for (let i = 0; i < n2; i++) {
             console.log("\nat" + i + " = list" + listArray[i].no+" = ic = "+listArray[i].ic);
         }
+
+         //
+        localStorage.setItem("n2",n2);
+        localStorage.setItem("listArray",JSON.stringify(listArray));
+        //
+
         displayList();
     }
 //}            
